@@ -39,7 +39,7 @@ class AliyunOSSClient
     }
 
     //处理错误信息
-    private function responseError($message)
+    private static function responseError($message)
     {
         exit($message);
     }
