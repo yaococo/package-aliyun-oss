@@ -1116,8 +1116,8 @@ class AliyunOSSClient
         $objectList = $listObjectInfo->getObjectList(); // 文件列表
         $prefixList = $listObjectInfo->getPrefixList(); // 目录列表
         return [
-            'objectList'=>$objectList,
-            'prefixList'=>$prefixList
+            'objectList' => $objectList,
+            'prefixList' => $prefixList
         ];
 
 //        if (!empty($objectList)) {
@@ -1135,24 +1135,16 @@ class AliyunOSSClient
     }
 
     /**
-     * TODO 需要结合真实的场景进行调整
      * 列出Bucket内所有目录和文件， 根据返回的nextMarker循环得到所有Objects
      *
      * @param $bucketName
+     * @param string $prefix
+     * @param string $delimiter
+     * @param string $nextMarker
+     * @param int $maxkeys
      */
-    public static function listAllObjects($bucketName)
+    public static function listAllObjects($bucketName, $prefix = '', $delimiter = '/', $nextMarker = '', $maxkeys = 30)
     {
-        //构造dir下的文件和虚拟目录
-        for ($i = 0; $i < 100; $i += 1) {
-            self::getOssClient()->putObject($bucketName, "dir/obj" . strval($i), "hi");
-            self::getOssClient()->createObjectDir($bucketName, "dir/obj" . strval($i));
-        }
-
-        $prefix = 'dir/';
-        $delimiter = '/';
-        $nextMarker = '';
-        $maxkeys = 30;
-
         while (true) {
             $options = array(
                 'delimiter' => $delimiter,
@@ -1163,7 +1155,8 @@ class AliyunOSSClient
             var_dump($options);
             try {
                 $listObjectInfo = self::getOssClient()->listObjects($bucketName, $options);
-            } catch (OssException $e) {
+            } catch
+            (OssException $e) {
                 self::responseError($e->getErrorMessage());
             }
             // 得到nextMarker，从上一次listObjects读到的最后一个文件的下一个文件开始继续获取文件列表
