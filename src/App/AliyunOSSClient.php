@@ -873,7 +873,7 @@ class AliyunOSSClient
      * @param array $options array()
      * @return bool
      */
-    public static function multiUploadFile($bucketName, $object, $file, array $options)
+    public static function multiUploadFile($bucketName, $object, $file, array $options = [])
     {
         try {
             return self::getOssClient()->multiuploadFile($bucketName, $object, $file, $options);
@@ -1115,18 +1115,23 @@ class AliyunOSSClient
         }
         $objectList = $listObjectInfo->getObjectList(); // 文件列表
         $prefixList = $listObjectInfo->getPrefixList(); // 目录列表
-        if (!empty($objectList)) {
-            print("objectList:\n");
-            foreach ($objectList as $objectInfo) {
-                print($objectInfo->getKey() . "\n");
-            }
-        }
-        if (!empty($prefixList)) {
-            print("prefixList: \n");
-            foreach ($prefixList as $prefixInfo) {
-                print($prefixInfo->getPrefix() . "\n");
-            }
-        }
+        return [
+            'objectList'=>$objectList,
+            'prefixList'=>$prefixList
+        ];
+
+//        if (!empty($objectList)) {
+//            print("objectList:\n");
+//            foreach ($objectList as $objectInfo) {
+//                print($objectInfo->getKey() . "\n");
+//            }
+//        }
+//        if (!empty($prefixList)) {
+//            print("prefixList: \n");
+//            foreach ($prefixList as $prefixInfo) {
+//                print($prefixInfo->getPrefix() . "\n");
+//            }
+//        }
     }
 
     /**
